@@ -1,0 +1,209 @@
+Setting environment for using XAMPP for Windows.
+user@DESKTOP-30JK2QL c:\xampp
+# mysql -u root
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 8
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> create database toko_kue;
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [(none)]> use toko_kue;
+Database changed
+MariaDB [toko_kue]> create table kue(
+    -> id_kue int auto_increment primary key,
+    -> nama_kue varchar(100),
+    -> harga int,
+    -> stok int);
+Query OK, 0 rows affected (0.094 sec)
+
+MariaDB [toko_kue]> create table pelanggan(
+    -> id_pelanggan int auto_increment primary key,
+    -> nama_pelanggan varchar(15),
+    -> no_hp varchar(15),
+    -> alamat varchar(100));
+Query OK, 0 rows affected (0.121 sec)
+
+MariaDB [toko_kue]> create table transaksi(
+    -> id_transaksi int auto_increment primary key,
+    -> id_kue int,
+    -> id_pelanggan int,
+    -> jumlah int,
+    -> tanggal date,
+    -> foreign key (id_kue) references pelanggan(id_pelanggan));
+Query OK, 0 rows affected (0.332 sec)
+
+MariaDB [toko_kue]> insert into kue(nama_kue, hara, stok, kategori) values
+    -> ('Brownies',25000,20,'Coklat'),
+    -> ('Donat',5000,50,'Goreng'),
+    -> ('Tart',150000,10,'Ulang Tahun'),
+    -> ('Cupcake',10000,30,'Mini Cake'),
+    -> ('Lapis Legit',80000,15,'Premium');
+ERROR 1054 (42S22): Unknown column 'hara' in 'field list'
+MariaDB [toko_kue]> insert into kue(nama_kue, harga, stok, kategori) values
+    -> ('Brownies',25000,20,'Coklat'),
+    -> ('Donat',5000,50,'Goreng'),
+    -> ('Tart',150000,10,'Ulang Tahun'),
+    -> ('Cupcake',10000,30,'Mini Cake'),
+    -> ('Lapis Legit',80000,15,'Premium');
+ERROR 1054 (42S22): Unknown column 'kategori' in 'field list'
+MariaDB [toko_kue]> alter table kue add kategori varchar(50);
+Query OK, 0 rows affected (0.032 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [toko_kue]> insert into kue(nama_kue, harga, stok, kategori) values
+    -> ('Brownies',25000,20,'Coklat'),
+    -> ('Donat',5000,50,'Goreng'),
+    -> ('Tart',150000,10,'Ulang Tahun'),
+    -> ('Cupcake',10000,30,'Mini Cake'),
+    -> ('Lapis Legit',80000,15,'Premium');
+Query OK, 5 rows affected (0.026 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [toko_kue]> select * from kue;
++--------+-------------+--------+------+-------------+
+| id_kue | nama_kue    | harga  | stok | kategori    |
++--------+-------------+--------+------+-------------+
+|      1 | Brownies    |  25000 |   20 | Coklat      |
+|      2 | Donat       |   5000 |   50 | Goreng      |
+|      3 | Tart        | 150000 |   10 | Ulang Tahun |
+|      4 | Cupcake     |  10000 |   30 | Mini Cake   |
+|      5 | Lapis Legit |  80000 |   15 | Premium     |
++--------+-------------+--------+------+-------------+
+5 rows in set (0.001 sec)
+
+MariaDB [toko_kue]> insert into pelanggan(nama_pelanggan, no_hp,alamat) values
+    -> ('Andi','081234567890','Jakarta'),
+    -> ('Siti','082345678901','Bekasi'),
+    -> ('Budi','083456789012','Depok'),
+    -> ('Rina','084567890123','Bogor'),
+    -> ('Dewi','085678901234','Tangerang');
+Query OK, 5 rows affected (0.033 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [toko_kue]> select * from pelanggan;
++--------------+----------------+--------------+-----------+
+| id_pelanggan | nama_pelanggan | no_hp        | alamat    |
++--------------+----------------+--------------+-----------+
+|            1 | Andi           | 081234567890 | Jakarta   |
+|            2 | Siti           | 082345678901 | Bekasi    |
+|            3 | Budi           | 083456789012 | Depok     |
+|            4 | Rina           | 084567890123 | Bogor     |
+|            5 | Dewi           | 085678901234 | Tangerang |
++--------------+----------------+--------------+-----------+
+5 rows in set (0.000 sec)
+
+MariaDB [toko_kue]> insert into transaksi (id_kue, id_pelanggan, jumlah, tanggal) values
+    -> (1,1,2,'2026-02-20'),
+    -> (2,2,5,'2026-02-21'),
+    -> (3,3,1,'2026-02-22'),
+    -> (4,4,3,'2026-02-23'),
+    -> (5,5,2,'2026-02-24');
+Query OK, 5 rows affected (0.029 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [toko_kue]> select * from transaksi;
++--------------+--------+--------------+--------+------------+
+| id_transaksi | id_kue | id_pelanggan | jumlah | tanggal    |
++--------------+--------+--------------+--------+------------+
+|            1 |      1 |            1 |      2 | 2026-02-20 |
+|            2 |      2 |            2 |      5 | 2026-02-21 |
+|            3 |      3 |            3 |      1 | 2026-02-22 |
+|            4 |      4 |            4 |      3 | 2026-02-23 |
+|            5 |      5 |            5 |      2 | 2026-02-24 |
++--------------+--------+--------------+--------+------------+
+5 rows in set (0.001 sec)
+
+MariaDB [toko_kue]> update kue set harga = 30000 where id_kue = 1;
+Query OK, 1 row affected (0.025 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [toko_kue]> select * from kue;
++--------+-------------+--------+------+-------------+
+| id_kue | nama_kue    | harga  | stok | kategori    |
++--------+-------------+--------+------+-------------+
+|      1 | Brownies    |  30000 |   20 | Coklat      |
+|      2 | Donat       |   5000 |   50 | Goreng      |
+|      3 | Tart        | 150000 |   10 | Ulang Tahun |
+|      4 | Cupcake     |  10000 |   30 | Mini Cake   |
+|      5 | Lapis Legit |  80000 |   15 | Premium     |
++--------+-------------+--------+------+-------------+
+5 rows in set (0.000 sec)
+
+MariaDB [toko_kue]> select pelanggan.nama_pelanggan,
+    -> kue.nama_kue,
+    -> transaksi.jumlah,
+    -> transaksi.tanggal from transaksi inner join pelanggan on transaksi.id_pelanggan = pelanggan.id_pelanggan inner join kue on transaksi.id_kue = kue.id_kue;
++----------------+-------------+--------+------------+
+| nama_pelanggan | nama_kue    | jumlah | tanggal    |
++----------------+-------------+--------+------------+
+| Andi           | Brownies    |      2 | 2026-02-20 |
+| Siti           | Donat       |      5 | 2026-02-21 |
+| Budi           | Tart        |      1 | 2026-02-22 |
+| Rina           | Cupcake     |      3 | 2026-02-23 |
+| Dewi           | Lapis Legit |      2 | 2026-02-24 |
++----------------+-------------+--------+------------+
+5 rows in set (0.001 sec)
+
+MariaDB [toko_kue]> select pelanggan.nama_pelanggan,
+    -> transaksi.jumlah,
+    -> transaksi.tanggal from pelanggan left join transaksi on pelanggan.id_pelanggan = transaksi.id_pelanggan;
++----------------+--------+------------+
+| nama_pelanggan | jumlah | tanggal    |
++----------------+--------+------------+
+| Andi           |      2 | 2026-02-20 |
+| Siti           |      5 | 2026-02-21 |
+| Budi           |      1 | 2026-02-22 |
+| Rina           |      3 | 2026-02-23 |
+| Dewi           |      2 | 2026-02-24 |
++----------------+--------+------------+
+5 rows in set (0.001 sec)
+
+MariaDB [toko_kue]> select sum(jumlah) as total_terjual from transaksi;
++---------------+
+| total_terjual |
++---------------+
+|            13 |
++---------------+
+1 row in set (0.001 sec)
+
+MariaDB [toko_kue]> select avg(harga) as rata_rata_harga from kue;
++-----------------+
+| rata_rata_harga |
++-----------------+
+|      55000.0000 |
++-----------------+
+1 row in set (0.000 sec)
+
+MariaDB [toko_kue]> select count(distinct id_pelanggan) as jumlah_pelanggan from transaksi;
++------------------+
+| jumlah_pelanggan |
++------------------+
+|                5 |
++------------------+
+1 row in set (0.001 sec)
+
+MariaDB [toko_kue]> create view view_laporan_penjualan as select pelanggan.nama_pelanggan,
+    -> kue.nama_kue,
+    -> transaksi.jumlah,
+    -> kue.harga,
+    -> (kue.harga*transaksi.jumlah) as total_harga from transaksi join pelanggan on transaksi.id_pelanggan = pelanggan.id_pelanggan join kue on transaksi.id_kue = kue.id_kue;
+Query OK, 0 rows affected (0.020 sec)
+
+MariaDB [toko_kue]> select * from view_laporan_penjualan;
++----------------+-------------+--------+--------+-------------+
+| nama_pelanggan | nama_kue    | jumlah | harga  | total_harga |
++----------------+-------------+--------+--------+-------------+
+| Andi           | Brownies    |      2 |  30000 |       60000 |
+| Siti           | Donat       |      5 |   5000 |       25000 |
+| Budi           | Tart        |      1 | 150000 |      150000 |
+| Rina           | Cupcake     |      3 |  10000 |       30000 |
+| Dewi           | Lapis Legit |      2 |  80000 |      160000 |
++----------------+-------------+--------+--------+-------------+
+5 rows in set (0.001 sec)
+
+MariaDB [toko_kue]>
