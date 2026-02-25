@@ -2,22 +2,6 @@
 
 Project ini merupakan implementasi database sederhana menggunakan MySQL / MariaDB pada XAMPP untuk sistem penjualan toko kue.
 
-Database ini mencakup:
-- Manajemen data kue
-- Data pelanggan
-- Transaksi penjualan
-- Query JOIN
-- Fungsi agregasi
-- View laporan penjualan
-
----
-
-## 🛠️ Tools yang Digunakan
-
-- XAMPP
-- MariaDB 10.4.32
-- MySQL Command Line
-
 ---
 
 ## 🗄️ Membuat Database
@@ -29,9 +13,9 @@ USE toko_kue;
 
 ---
 
-## 📦 Struktur Tabel
+# 📦 Struktur Tabel
 
-### 🎂 Tabel `kue`
+## 🎂 Tabel `kue`
 
 ```sql
 CREATE TABLE kue(
@@ -50,7 +34,7 @@ ALTER TABLE kue ADD kategori VARCHAR(50);
 
 ---
 
-### 👤 Tabel `pelanggan`
+## 👤 Tabel `pelanggan`
 
 ```sql
 CREATE TABLE pelanggan(
@@ -63,7 +47,7 @@ CREATE TABLE pelanggan(
 
 ---
 
-### 🧾 Tabel `transaksi`
+## 🧾 Tabel `transaksi`
 
 ```sql
 CREATE TABLE transaksi(
@@ -77,9 +61,9 @@ CREATE TABLE transaksi(
 
 ---
 
-## 📥 Insert Data
+# 📥 Insert Data
 
-### Data Kue
+## Data Kue
 
 ```sql
 INSERT INTO kue(nama_kue, harga, stok, kategori) VALUES
@@ -90,9 +74,23 @@ INSERT INTO kue(nama_kue, harga, stok, kategori) VALUES
 ('Lapis Legit',80000,15,'Premium');
 ```
 
+### 🔎 Output
+
+```text
++--------+-------------+--------+------+-------------+
+| id_kue | nama_kue    | harga  | stok | kategori    |
++--------+-------------+--------+------+-------------+
+|      1 | Brownies    |  30000 |   20 | Coklat      |
+|      2 | Donat       |   5000 |   50 | Goreng      |
+|      3 | Tart        | 150000 |   10 | Ulang Tahun |
+|      4 | Cupcake     |  10000 |   30 | Mini Cake   |
+|      5 | Lapis Legit |  80000 |   15 | Premium     |
++--------+-------------+--------+------+-------------+
+```
+
 ---
 
-### Data Pelanggan
+## Data Pelanggan
 
 ```sql
 INSERT INTO pelanggan(nama_pelanggan, no_hp, alamat) VALUES
@@ -103,9 +101,23 @@ INSERT INTO pelanggan(nama_pelanggan, no_hp, alamat) VALUES
 ('Dewi','085678901234','Tangerang');
 ```
 
+### 🔎 Output
+
+```text
++--------------+----------------+--------------+-----------+
+| id_pelanggan | nama_pelanggan | no_hp        | alamat    |
++--------------+----------------+--------------+-----------+
+|            1 | Andi           | 081234567890 | Jakarta   |
+|            2 | Siti           | 082345678901 | Bekasi    |
+|            3 | Budi           | 083456789012 | Depok     |
+|            4 | Rina           | 084567890123 | Bogor     |
+|            5 | Dewi           | 085678901234 | Tangerang |
++--------------+----------------+--------------+-----------+
+```
+
 ---
 
-### Data Transaksi
+## Data Transaksi
 
 ```sql
 INSERT INTO transaksi (id_kue, id_pelanggan, jumlah, tanggal) VALUES
@@ -116,11 +128,25 @@ INSERT INTO transaksi (id_kue, id_pelanggan, jumlah, tanggal) VALUES
 (5,5,2,'2026-02-24');
 ```
 
+### 🔎 Output
+
+```text
++--------------+--------+--------------+--------+------------+
+| id_transaksi | id_kue | id_pelanggan | jumlah | tanggal    |
++--------------+--------+--------------+--------+------------+
+|            1 |      1 |            1 |      2 | 2026-02-20 |
+|            2 |      2 |            2 |      5 | 2026-02-21 |
+|            3 |      3 |            3 |      1 | 2026-02-22 |
+|            4 |      4 |            4 |      3 | 2026-02-23 |
+|            5 |      5 |            5 |      2 | 2026-02-24 |
++--------------+--------+--------------+--------+------------+
+```
+
 ---
 
-## 🔎 Query JOIN
+# 🔎 Query JOIN
 
-### INNER JOIN
+## INNER JOIN
 
 ```sql
 SELECT pelanggan.nama_pelanggan,
@@ -134,9 +160,23 @@ INNER JOIN kue
 ON transaksi.id_kue = kue.id_kue;
 ```
 
+### 🔎 Output
+
+```text
++----------------+-------------+--------+------------+
+| nama_pelanggan | nama_kue    | jumlah | tanggal    |
++----------------+-------------+--------+------------+
+| Andi           | Brownies    |      2 | 2026-02-20 |
+| Siti           | Donat       |      5 | 2026-02-21 |
+| Budi           | Tart        |      1 | 2026-02-22 |
+| Rina           | Cupcake     |      3 | 2026-02-23 |
+| Dewi           | Lapis Legit |      2 | 2026-02-24 |
++----------------+-------------+--------+------------+
+```
+
 ---
 
-### LEFT JOIN
+## LEFT JOIN
 
 ```sql
 SELECT pelanggan.nama_pelanggan,
@@ -147,34 +187,80 @@ LEFT JOIN transaksi
 ON pelanggan.id_pelanggan = transaksi.id_pelanggan;
 ```
 
+### 🔎 Output
+
+```text
++----------------+--------+------------+
+| nama_pelanggan | jumlah | tanggal    |
++----------------+--------+------------+
+| Andi           |      2 | 2026-02-20 |
+| Siti           |      5 | 2026-02-21 |
+| Budi           |      1 | 2026-02-22 |
+| Rina           |      3 | 2026-02-23 |
+| Dewi           |      2 | 2026-02-24 |
++----------------+--------+------------+
+```
+
 ---
 
-## 📊 Fungsi Agregasi
+# 📊 Fungsi Agregasi
 
-### Total Kue Terjual
-
-```sql
-SELECT SUM(jumlah) AS total_terjual 
-FROM transaksi;
-```
-
-### Rata-rata Harga Kue
+## Total Kue Terjual
 
 ```sql
-SELECT AVG(harga) AS rata_rata_harga 
-FROM kue;
+SELECT SUM(jumlah) AS total_terjual FROM transaksi;
 ```
 
-### Jumlah Pelanggan yang Bertransaksi
+### 🔎 Output
+
+```text
++---------------+
+| total_terjual |
++---------------+
+|            13 |
++---------------+
+```
+
+---
+
+## Rata-rata Harga Kue
+
+```sql
+SELECT AVG(harga) AS rata_rata_harga FROM kue;
+```
+
+### 🔎 Output
+
+```text
++-----------------+
+| rata_rata_harga |
++-----------------+
+|      55000.0000 |
++-----------------+
+```
+
+---
+
+## Jumlah Pelanggan yang Bertransaksi
 
 ```sql
 SELECT COUNT(DISTINCT id_pelanggan) AS jumlah_pelanggan 
 FROM transaksi;
 ```
 
+### 🔎 Output
+
+```text
++------------------+
+| jumlah_pelanggan |
++------------------+
+|                5 |
++------------------+
+```
+
 ---
 
-## 📑 View Laporan Penjualan
+# 📑 View Laporan Penjualan
 
 ```sql
 CREATE VIEW view_laporan_penjualan AS
@@ -190,34 +276,35 @@ JOIN kue
 ON transaksi.id_kue = kue.id_kue;
 ```
 
-Menampilkan view:
+Menampilkan View:
 
 ```sql
 SELECT * FROM view_laporan_penjualan;
 ```
 
+### 🔎 Output
+
+```text
++----------------+-------------+--------+--------+-------------+
+| nama_pelanggan | nama_kue    | jumlah | harga  | total_harga |
++----------------+-------------+--------+--------+-------------+
+| Andi           | Brownies    |      2 |  30000 |       60000 |
+| Siti           | Donat       |      5 |   5000 |       25000 |
+| Budi           | Tart        |      1 | 150000 |      150000 |
+| Rina           | Cupcake     |      3 |  10000 |       30000 |
+| Dewi           | Lapis Legit |      2 |  80000 |      160000 |
++----------------+-------------+--------+--------+-------------+
+```
+
 ---
 
-## 📌 Fitur yang Diimplementasikan
+# 🎯 Kesimpulan
 
-- CREATE DATABASE  
-- CREATE TABLE  
-- ALTER TABLE  
-- INSERT DATA  
-- UPDATE DATA  
-- SELECT  
-- INNER JOIN  
-- LEFT JOIN  
-- Aggregate Function (SUM, AVG, COUNT)  
-- VIEW  
+Project ini menunjukkan implementasi dasar sistem penjualan menggunakan relational database dengan:
 
----
+- Relasi antar tabel
+- JOIN (INNER & LEFT)
+- Fungsi agregasi (SUM, AVG, COUNT)
+- VIEW untuk laporan penjualan
 
-## 🎯 Kesimpulan
-
-Project ini menunjukkan implementasi dasar sistem penjualan menggunakan relational database dengan relasi antar tabel dan pembuatan laporan menggunakan VIEW.
-
-Cocok untuk:
-- Latihan Database Dasar
-- Tugas Sekolah / Kuliah
-- Simulasi Sistem Kasir Sederhana
+Cocok untuk latihan database dasar dan simulasi sistem kasir sederhana.
