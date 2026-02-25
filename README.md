@@ -1,5 +1,7 @@
 # 🍰 Project Database Toko Kue
 
+**Author:** [Ghibran Rajendra S.](https://www.linkedin.com/in/ghibran-rajendra-s-5939353a5/)
+
 Project ini merupakan implementasi database sederhana menggunakan MySQL / MariaDB pada XAMPP untuk sistem penjualan toko kue.
 
 ---
